@@ -17,18 +17,15 @@ import javax.swing.table.TableColumn;
 
 import utils.MyUtils;
 
-public class VariableSetterPanel extends JPanel
+public class VariableViewerPanel extends JPanel
 {
-	
-	
-
 	private JTable variablesTable;
 	private VariablesTableModel variableTableModel;
 
 	/**
 	 * Create the panel.
 	 */
-	public VariableSetterPanel()
+	public VariableViewerPanel()
 	{
 		setGui();
 	}
@@ -58,7 +55,8 @@ public class VariableSetterPanel extends JPanel
 		gc2.gridy = 1;
 		gc2.anchor = GridBagConstraints.CENTER;
 		JScrollPane scrollPane = new JScrollPane(variablesTable);
-		scrollPane.setPreferredSize(new Dimension(250, scrollPane.getPreferredSize().height * 9 / 10));
+		scrollPane.setPreferredSize(new Dimension(250,
+				scrollPane.getPreferredSize().height * 9 / 10));
 		add(scrollPane, gc2);
 
 	}
@@ -71,32 +69,16 @@ public class VariableSetterPanel extends JPanel
 		this.variableTableModel.addVariable(newVariable);
 	}
 
-	/**
-	 * @return an array of the values of the table
-	 */
-	public double[] getValues()
-	{
-		return this.variableTableModel.getValues();
-	}
-
 	class VariablesTableModel extends AbstractTableModel
 	{
 		private ArrayList<String> variableNames;
-		private ArrayList<Double> values;
+		private ArrayList<String> values;
 
 		public VariablesTableModel()
 		{
 			this.variableNames = new ArrayList<>();
 
 			this.values = new ArrayList<>();
-		}
-
-		public double[] getValues()
-		{
-			double[] result = new double[values.size()];
-			for (int i = 0; i < result.length; i++)
-				result[i] = values.get(i);
-			return result;
 		}
 
 		public int getColumnCount()
@@ -118,7 +100,7 @@ public class VariableSetterPanel extends JPanel
 			case 0:
 				return String.class;
 			case 1:
-				return Double.class;
+				return String.class;
 			default:
 				return null;
 			}
@@ -141,15 +123,7 @@ public class VariableSetterPanel extends JPanel
 		@Override
 		public boolean isCellEditable(int row, int col)
 		{
-			switch (col)
-			{
-			case 0:
-				return false;
-			case 1:
-				return true;
-			default:
-				return false;
-			}
+			return false;
 		}
 
 		@Override
@@ -159,7 +133,7 @@ public class VariableSetterPanel extends JPanel
 			{
 
 			case 1:
-				this.values.set(row, (Double) value);
+				this.values.set(row, (String) value);
 				break;
 			default:
 				break;
@@ -183,16 +157,16 @@ public class VariableSetterPanel extends JPanel
 		public void addVariable(String newVariable)
 		{
 			this.variableNames.add(newVariable);
-			this.values.add(0.0);
+			this.values.add("-");
 			fireTableDataChanged();
 		}
 
 	}
 
-	public void setValue(int row, double d)
+	public void setValue(int row, String d)
 	{
 		this.variableTableModel.setValueAt(d, row, 1);
-		
+
 	}
 
 }

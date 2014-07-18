@@ -7,8 +7,10 @@ import gui.custom_panels.VariableAdderPanel.VariableAdderListener;
 import gui.custom_panels.VariableSetterPanel;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import utils.MyUtils;
 import Core.Equation;
@@ -28,7 +31,7 @@ public class FunctionEvaluatorPanel extends JPanel implements EquationPanelListe
 	private EquationPanel equationPanel;
 	private VariableSetterPanel panelVariableSetter;
 	private JButton buttonEvaluate;
-	private JTextArea textFieldResult;
+	private JTextField textFieldResult;
 
 	/**
 	 * Create the panel.
@@ -109,8 +112,11 @@ public class FunctionEvaluatorPanel extends JPanel implements EquationPanelListe
 		resultAndOutputPanel.add(buttonEvaluate);
 
 		// result text
-		textFieldResult = new JTextArea(2, 10);
+		textFieldResult = new JTextField(15);
+		textFieldResult.setEditable(false);
 		textFieldResult.setFont(MyUtils.fontLarge);
+		textFieldResult.setPreferredSize(new Dimension(textFieldResult.getPreferredSize().width, 100));
+		textFieldResult.setHorizontalAlignment(JTextField.CENTER);
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.gridy = 1;
 		resultAndOutputPanel.add(textFieldResult, gc);

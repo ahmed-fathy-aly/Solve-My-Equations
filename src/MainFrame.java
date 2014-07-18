@@ -1,4 +1,5 @@
 import gui.main_panels.FunctionEvaluatorPanel;
+import gui.main_panels.FunctionSolverPanel;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -7,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -19,6 +21,8 @@ public class MainFrame extends JFrame
 
 	private JPanel contentPane;
 	private FunctionEvaluatorPanel functionEvaluatorPanel;
+	private JTabbedPane tabbedPane;
+	private FunctionSolverPanel functionSolverPanel;
 
 	/**
 	 * Launch the application.
@@ -62,13 +66,24 @@ public class MainFrame extends JFrame
 		// The content pane
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(new BorderLayout());
 		setContentPane(contentPane);
 
+		// tabbed panne
+		tabbedPane = new JTabbedPane();
+		tabbedPane.setFont(MyUtils.fontLarge);
+		tabbedPane.setTabPlacement(JTabbedPane.LEFT);
+		contentPane.add(tabbedPane, BorderLayout.CENTER);
+		
+		// function solver 
+		functionSolverPanel = new FunctionSolverPanel();
+		tabbedPane.add(functionSolverPanel, "Solver");
+		
 		// function evaluator
 		functionEvaluatorPanel = new FunctionEvaluatorPanel();
-		contentPane.add(functionEvaluatorPanel, BorderLayout.CENTER);
+		tabbedPane.add(functionEvaluatorPanel, "Evaluator");
 		
+
 	
 
 	}

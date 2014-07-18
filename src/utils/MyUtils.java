@@ -15,9 +15,25 @@ public class MyUtils
 	public static Font fontSmall = new Font("Trebuchet MS", Font.PLAIN, 16);
 	public static Font fontLarge = new Font("Trebuchet MS", Font.PLAIN, 22);
 	
-	public static int width = 900;
-	public static int height = 500;
+	public static int width = 1280;
+	public static int height = 600;
 	
+	public enum Solvers 
+	{
+		BISECTION_METHOD("Bisection method"), 
+		NEWTON_SINGLE_EQUATION("Newton single equation"), 
+		NEWTON_SYSTEM_EQUATIONS("Newton system of equations");
+		
+		private String text;
+		Solvers(String text)
+		{
+			this.text = text;
+		}
+		public String toString()
+		{
+			return text;
+		}
+	}
 	public static  ImageIcon loadIcon(String path, Class c)
 	{
 		URL url = c.getResource(path);
@@ -39,4 +55,6 @@ public class MyUtils
 		}
 		return img;
 	}
+
+
 }
