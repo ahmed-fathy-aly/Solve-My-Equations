@@ -247,44 +247,94 @@ public class Equation
 	{
 		Queue<String> tempResult = new LinkedList<String>();
 
-		// Remove spaces
+		// Remove spaces and gets index for separators
 		String tempString = equationStr.replace(" ", "");
-		int originalLength = tempString.length();
-
-		// test each substring of the equation
-		for (int startIndex = 0; startIndex < tempString.length(); startIndex++)
+		ArrayList<Integer> separatorsndex = new ArrayList<>();
+		for (int i = 0; i < tempString.length(); i++)
 		{
-			// Check if it's a number or a dot or a parenthesis
-			char c = tempString.charAt(startIndex);
-			if (c == '.' || c == '(' || c == ')' || !(c <= '/' || c >= ':'))
-			{
-				tempResult.add(c + "");
-				continue;
-			}
+			String currentChar = tempString.charAt(i) + "";
+			if (operatorsSet.contains(currentChar) || currentChar.equals("(")
+					|| currentChar.equals(")"))
+				separatorsndex.add(i);
+		}
 
-			// get every substring to find which operator or variable it is
-			for (int endIndex = startIndex + 1; endIndex <= tempString.length(); endIndex++)
+		// if there's no separators
+		if (separatorsndex.size() == 0)
+		{
+			String onlyToken = tempString;
+			if (variablesSet.contains(onlyToken) || isDouble(onlyToken))
 			{
-				String currentString = tempString.substring(startIndex, endIndex);
-				if (operatorsSet.contains(currentString) || variablesSet.contains(currentString))
-				{
-					tempResult.add(currentString);
-					startIndex = endIndex - 1;
-					break;
-				}
+				ArrayList<String> result = new ArrayList<>();
+				result.add(onlyToken);
+				return result;
+			} else
+			{
+				throw new Exception();
 			}
 		}
 
-		// concatenate numbers
-		ArrayList<String> result = concatenateTokens(tempResult);
+		// the first token
+		if (separatorsndex.get(0) != 0)
+		{
+			String firstToken = tempString.substring(0, separatorsndex.get(0));
+			if (variablesSet.contains(firstToken) || isDouble(firstToken))
+			{
+				tempResult.add(firstToken);
+			} else
+			{
+				throw new Exception();
+			}
+		}
 
-		// check the length of the result
-		int resultLength = 0;
-		for (String string : result)
-			resultLength += string.length();
+		// operate on each token
+		int currentIndex = separatorsndex.get(0);
+		int separatorIndex = 0;
+		while (separatorIndex < separatorsndex.size())
+		{
+			if (separatorsndex.contains(currentIndex))
+			{
+				// if this index is a separator then add it
+				tempResult.add(tempString.charAt(currentIndex) + "");
+				separatorIndex++;
+				currentIndex++;
+			} else
+			{
+				// parse the next token
+				String token = tempString.substring(currentIndex, separatorsndex
+						.get(separatorIndex));
+				if (variablesSet.contains(token) || isDouble(token))
+				{
+					tempResult.add(token);
+					currentIndex += token.length();
+				} else
+				{
+					throw new Exception();
+				}
 
-		if (resultLength != originalLength)
-			throw new Exception();
+			}
+
+		}
+
+		// parse the last token
+		if (separatorsndex.get(separatorsndex.size() - 1) != tempString.length() - 1)
+		{
+			String lastToken = tempString
+					.substring(separatorsndex.get(separatorsndex.size() - 1) + 1);
+			if (variablesSet.contains(lastToken) || isDouble(lastToken))
+			{
+				tempResult.add(lastToken);
+			} else
+			{
+				throw new Exception();
+			}
+		}
+
+		// form the result list
+		ArrayList<String> result = new ArrayList<>();
+		for (String token : tempResult)
+			result.add(token);
+
+
 		return result;
 	}
 
@@ -438,17 +488,13 @@ public class Equation
 		try
 		{
 			equation = new Equation(3, new String[]
-			{ "x", "y", "z" }, "(1*(x^3) + 4*y + 3^z) / 0.5 ");
+			{ "x", "x2", "x3", "y" }, "(x) + x2/ (x3) + 2^y");
 			System.out.println(equation.evaluateAt(new double[]
-					{ 2, 2, 3 }));
-					System.out.println(equation.evaluateDerivativeAt(new double[]
-					{ 3, 2, 3 }, 0));
-					System.out.println(equation.evaluateSecondDerivativeAt(new double[]
-					{ 3, 2, 3 }, 0));		} catch (Exception e)
+			{ 1.0, 2.0, 3.0, 3.0 }));
+		} catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-
 
 	}
 
