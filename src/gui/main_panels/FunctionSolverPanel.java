@@ -18,12 +18,18 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import Core.Equation;
+import solvers.BisectionMethodSolver;
+import solvers.NewtonMethodMultipleSolver;
+import solvers.NewtonMethodSingleSolver;
 import utils.MyUtils;
 import utils.MyUtils.Solvers;
 
-public class FunctionSolverPanel extends JPanel implements VariableAdderListener, EquationsTableListener
+public class FunctionSolverPanel extends JPanel implements VariableAdderListener,
+		EquationsTableListener
 {
 
 	private VariableAdderPanel variableAdderPanel;
@@ -46,23 +52,23 @@ public class FunctionSolverPanel extends JPanel implements VariableAdderListener
 	{
 		// set layout
 		setLayout(new BorderLayout());
-		
+
 		// variable adder
 		variableAdderPanel = new VariableAdderPanel();
 		variableAdderPanel.setListener(this);
 		add(variableAdderPanel, BorderLayout.WEST);
-		
+
 		// variable viewer and add button
 		JPanel p = new JPanel(new GridBagLayout());
 		add(p, BorderLayout.EAST);
-		
+
 		// variable viewer
 		variableViewerPanel = new VariableViewerPanel();
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.gridx = 0;
 		gc.gridy = 0;
 		p.add(variableViewerPanel, gc);
-		
+
 		// solve button
 		JButton buttonSolve = new JButton("Solve");
 		buttonSolve.setFont(MyUtils.fontLarge);
@@ -77,14 +83,14 @@ public class FunctionSolverPanel extends JPanel implements VariableAdderListener
 		GridBagConstraints gc2 = new GridBagConstraints();
 		gc2.gridx = 0;
 		gc2.gridy = 1;
-		//p.add(buttonSolve, gc2);
+		// p.add(buttonSolve, gc2);
 		add(buttonSolve, BorderLayout.SOUTH);
-		
+
 		// equations table
 		equationTablePanel = new EquationsTablePanel();
 		equationTablePanel.setListener(this);
 		add(equationTablePanel, BorderLayout.CENTER);
-		
+
 		// solver chooser
 		JPanel chooserPanel = new JPanel(new FlowLayout());
 		JLabel labelChooseSolver = new JLabel("Solver : ");
@@ -99,8 +105,84 @@ public class FunctionSolverPanel extends JPanel implements VariableAdderListener
 
 	protected void onButtonSolveClicked()
 	{
-		// TODO Auto-generated method stub
-		
+		// gather input
+		String[] variables = getVariables();
+		String[] equations = equationTablePanel.getEquations();
+
+		// for newton single equation
+		if (this.solverChooser.getSelectedItem() == MyUtils.Solvers.NEWTON_SINGLE_EQUATION)
+		{
+			if (equations.length == 1)
+			{
+				try
+				{
+					Equation equation = new Equation(variables.length, variables, equations[0]);
+					NewtonMethodSingleSolver solver = new NewtonMethodSingleSolver(equation);
+					double values[] = solver.solve();
+					this.variableViewerPanel.setValues(values);
+				} catch (Exception e)
+				{
+					JOptionPane.showMessageDialog(getParent(), "Oops....couldn't solve it :(");
+				}
+				return;
+			} else
+			{
+				JOptionPane.showMessageDialog(getParent(),
+						"This solver solves only one equation only");
+				return;
+			}
+		}
+
+		// for bisection method
+		if (this.solverChooser.getSelectedItem() == MyUtils.Solvers.BISECTION_METHOD)
+		{
+			if (equations.length == 1)
+			{
+				try
+				{
+					// make the equation
+					Equation equation = new Equation(variables.length, variables, equations[0]);
+					BisectionMethodSolver solver = new BisectionMethodSolver(equation);
+					double values[] = solver.solve();
+					this.variableViewerPanel.setValues(values);
+				} catch (Exception e)
+				{
+					JOptionPane.showMessageDialog(getParent(), "Oops....couldn't solve it :(");
+				}
+				return;
+
+			} else
+			{
+				JOptionPane.showMessageDialog(getParent(), "This solver solves one equation only");
+				return;
+			}
+		}
+
+		// for newton's method for multiple equations
+		if (this.solverChooser.getSelectedItem() == MyUtils.Solvers.NEWTON_SYSTEM_EQUATIONS)
+		{
+			if (equations.length != 0)
+			{
+				try
+				{
+					Equation[] equationsSystem = new Equation[equations.length];
+					for (int i = 0; i < equationsSystem.length; i++)
+						equationsSystem[i] = new Equation(variables.length, variables, equations[i]);
+					NewtonMethodMultipleSolver solver = new NewtonMethodMultipleSolver(
+							equationsSystem);
+					double values[] = solver.solve();
+					this.variableViewerPanel.setValues(values);
+				} catch (Exception e)
+				{
+					JOptionPane.showMessageDialog(getParent(), "Oops....couldn't solve it :(");
+				}
+				return;
+			} else
+			{
+				JOptionPane.showMessageDialog(getParent(), "Please add an equation");
+				return;
+			}
+		}
 	}
 
 	public void onVariableAdded(String newVariable)

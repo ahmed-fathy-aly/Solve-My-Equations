@@ -62,6 +62,26 @@ public class VariableViewerPanel extends JPanel
 	}
 
 	/**
+	 * @param row index of the row that'll be modified
+	 * @param d the new value
+	 */
+	public void setValue(int row, String d)
+	{
+		this.variableTableModel.setValueAt(d, row, 1);
+
+	}
+
+	/**
+	 * @param values array of the new values inserted in the value field of the table
+	 */
+	public void setValues(double[] values)
+	{
+		for (int i = 0; i < values.length; i++)
+			setValue(i, values[i] + "");
+		this.variableTableModel.fireTableDataChanged();
+		
+	}
+	/**
 	 * adds a variable name with the value of 0
 	 */
 	public void addVariable(String newVariable)
@@ -163,10 +183,6 @@ public class VariableViewerPanel extends JPanel
 
 	}
 
-	public void setValue(int row, String d)
-	{
-		this.variableTableModel.setValueAt(d, row, 1);
-
-	}
+	
 
 }

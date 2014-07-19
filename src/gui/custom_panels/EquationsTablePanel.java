@@ -143,6 +143,14 @@ public class EquationsTablePanel extends JPanel implements EquationPanelListener
 		this.equationsTableModel.fireTableDataChanged();
 	}
 
+	public String[] getEquations()
+	{
+		String[] result = new String[this.equationsTable.getRowCount()];
+		for (int i = 0; i < this.equationsTableModel.equationStrs.size(); i++)
+			result[i] = this.equationsTableModel.equationStrs.get(i);
+		return result;
+	}
+	
 	class EquationsTableModel extends AbstractTableModel
 	{
 
@@ -299,5 +307,7 @@ public class EquationsTablePanel extends JPanel implements EquationPanelListener
 	{
 		String[] getVariables();
 	}
+
+
 
 }
