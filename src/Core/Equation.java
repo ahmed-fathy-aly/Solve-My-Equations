@@ -215,6 +215,48 @@ public class Equation
 	}
 
 	/**
+	 * finds the partial derivative for the function when derived with respect
+	 * to variable1 then with respect to variable 2
+	 * 
+	 * @param values
+	 *            the values of the variables
+	 * @param varialble1Index
+	 *            the index of the first variable we'll differentiate to in the
+	 *            array variables
+	 * @param variable2Index
+	 *            the index of the second variable we'll differentiate to in the
+	 *            array variables
+	 */
+	public double evaluateSecondPartialDerivativeat(double[] values, int varialble1Index,
+			int variable2Index)
+	{
+		double result = 0;
+		double h = Math.sqrt(epsilon);
+
+		// let variable1Index is the index of x, variable2Index is the index of
+		// y
+		// F(x+h, y+h)
+		values[varialble1Index] += h;
+		values[variable2Index] += h;
+		result += evaluateAt(values);
+
+		// F(x+h, y-h)
+		values[variable2Index] -= 2 * h;
+		result -= evaluateAt(values);
+
+		// F(x-h, y-h)
+		values[varialble1Index] -= 2 * h;
+		result += evaluateAt(values);
+
+		// F(x-h, y+h)
+		values[variable2Index] += 2 * h;
+		result -= evaluateAt(values);
+
+		result /= 4 * h * h;
+		return result;
+	}
+
+	/**
 	 * @param value1
 	 *            left value
 	 * @param value2
@@ -333,7 +375,6 @@ public class Equation
 		ArrayList<String> result = new ArrayList<>();
 		for (String token : tempResult)
 			result.add(token);
-
 
 		return result;
 	}
@@ -488,9 +529,9 @@ public class Equation
 		try
 		{
 			equation = new Equation(3, new String[]
-			{ "x", "x2", "x3", "y" }, "(x) + x2/ (x3) + 2^y");
-			System.out.println(equation.evaluateAt(new double[]
-			{ 1.0, 2.0, 3.0, 3.0 }));
+			{ "x", "x2", "x3", "y" }, "(4*x^2 + 2*x*y + 3)/2");
+			System.out.println(equation.evaluateSecondPartialDerivativeat(new double[]
+			{ 1.0, 2.0, 3.0, 3.0 }, 0, 3));
 		} catch (Exception e)
 		{
 			e.printStackTrace();

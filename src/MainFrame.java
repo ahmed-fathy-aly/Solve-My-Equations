@@ -68,7 +68,9 @@ public class MainFrame extends JFrame
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout());
 		setContentPane(contentPane);
-
+		setTitle("Solve my equations");
+		setIconImage(MyUtils.loadImage("images/iconCalculator.png", getClass()));
+		
 		// tabbed panne
 		tabbedPane = new JTabbedPane();
 		tabbedPane.setFont(MyUtils.fontLarge);
