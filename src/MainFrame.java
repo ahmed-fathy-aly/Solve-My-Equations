@@ -70,6 +70,7 @@ public class MainFrame extends JFrame
 		setContentPane(contentPane);
 		setTitle("Solve my equations");
 		setIconImage(MyUtils.loadImage("images/iconCalculator.png", getClass()));
+	
 		
 		// tabbed panne
 		tabbedPane = new JTabbedPane();

@@ -23,6 +23,7 @@ public class BisectionMethodSolver
 	{
 		return new double[this.equation.getnVariables()];
 	}
+
 	public static void main(String[] args)
 	{
 		// TODO Auto-generated method stub
